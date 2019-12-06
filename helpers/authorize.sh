@@ -15,13 +15,13 @@ gcloud services enable container.googleapis.com \
        redis.googleapis.com
 
 # Configure Cloud IAM
-export PROJECT_ID=$(gcloud config get-value project)
+export GOOGLE_PROJECT=$(gcloud config get-value project)
 gcloud iam service-accounts create terrakube \
     --display-name "Terraform Kubernetes"
 gcloud iam service-accounts keys create --iam-account \
-    terrakube@${PROJECT_ID}.iam.gserviceaccount.com credentials.json
-gcloud projects add-iam-policy-binding --role roles/owner ${PROJECT_ID} \
-    --member=serviceAccount:terrakube@${PROJECT_ID}.iam.gserviceaccount.com
+    terrakube@${GOOGLE_PROJECT}.iam.gserviceaccount.com credentials.json
+gcloud projects add-iam-policy-binding --role roles/owner ${GOOGLE_PROJECT} \
+    --member=serviceAccount:terrakube@${GOOGLE_PROJECT}.iam.gserviceaccount.com
 
-gsutil mb gs://${PROJECT_ID}-tfstate
-gsutil versioning set on gs://${PROJECT_ID}-tfstate
+gsutil mb gs://${GOOGLE_PROJECT}-tfstate
+gsutil versioning set on gs://${GOOGLE_PROJECT}-tfstate
