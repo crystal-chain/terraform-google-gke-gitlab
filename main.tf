@@ -138,17 +138,29 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 resource "google_sql_database_instance" "gitlab_db" {
   depends_on       = ["google_service_networking_connection.private_vpc_connection"]
-  name             = "gitlab-db"
+  name             = "gitlab-pg"
   region           = "${var.region}"
   database_version = "POSTGRES_9_6"
 
   settings {
-    tier            = "db-custom-4-15360"
+    tier            = "db-g1-small"
     disk_autoresize = true
 
     ip_configuration {
       ipv4_enabled    = "false"
       private_network = "${google_compute_network.gitlab.self_link}"
+    }
+
+    location_preference {
+      zone = "${var.region}-b"
+    }
+
+    availability_type = "ZONAL"
+
+    maintenance_window {
+      day = 7
+      hour = 0
+      update_track = "stable"
     }
   }
 }
@@ -180,8 +192,8 @@ resource "google_redis_instance" "gitlab" {
 
   depends_on = ["google_project_service.redis"]
 
-  location_id             = "${var.region}-a"
-  alternative_location_id = "${var.region}-f"
+  location_id             = "${var.region}-b"
+  alternative_location_id = "${var.region}-c"
   display_name            = "GitLab Redis"
 }
 
@@ -225,6 +237,10 @@ resource "google_container_cluster" "gitlab" {
   project            = "${var.project_id}"
   name               = "gitlab"
   location           = "${var.region}"
+  node_locations = [
+    "${var.region}-b",
+    "${var.region}-c",
+  ]
   min_master_version = "1.12"
 
   # We can't create a cluster with no node pool defined, but we want to only use
@@ -413,7 +429,7 @@ resource "helm_release" "gitlab" {
   name       = "gitlab"
   repository = "${data.helm_repository.gitlab.name}"
   chart      = "gitlab"
-  version    = "2.3.7"
+  version    = "2.5.4"
   timeout    = 600
 
   values = ["${data.template_file.helm_values.rendered}"]
