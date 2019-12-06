@@ -1,0 +1,9 @@
+Outputs:
+
+gitlab_url = https://gitlab.104.199.84.36.xip.io
+project_id = terrakube
+root_password_instructions =
+  Run the following commands to get the root user password:
+
+  gcloud container clusters get-credentials gitlab --zone europe-west1 --project terrakube
+  kubectl get secret gitlab-gitlab-initial-root-password -o go-template='{{ .data.password }}' | base64 -d && echo

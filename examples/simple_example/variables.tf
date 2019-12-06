@@ -21,3 +21,15 @@ variable "project_id" {
 variable "certmanager_email" {
   description = "Email used to retrieve SSL certificates from Let's Encrypt"
 }
+
+variable "region" {
+  description = "GCP region to deploy resources to"
+}
+
+variable "gitlab_db_password" {
+  description = "Password for the GitLab Postgres user"
+}
+
+variable "domain" {
+  description = "Domain for hosting gitlab functionality (ie mydomain.com would access gitlab at gitlab.mydomain.com)"
+}

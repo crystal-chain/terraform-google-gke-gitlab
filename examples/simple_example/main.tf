@@ -17,7 +17,10 @@
 provider "google" {}
 
 module "gke-gitlab" {
-  source            = "../../"
-  project_id        = "${var.project_id}"
-  certmanager_email = "no-reply@${var.project_id}.example.com"
+  source             = "../../"
+  project_id         = "${var.project_id}"
+  certmanager_email  = "${var.certmanager_email}"
+  region             = "${var.region}"
+  gitlab_db_password = "${var.gitlab_db_password}"
+  domain             = "${var.domain}"
 }
