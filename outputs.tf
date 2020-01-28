@@ -20,7 +20,7 @@ output "gitlab_address" {
 }
 
 output "gitlab_url" {
-  value       = "https://gitlab.${google_compute_address.gitlab[0].address}.xip.io"
+  value       = "https://gitlab.${var.domain}"
   description = "URL where you can access your GitLab instance"
 }
 
@@ -31,10 +31,9 @@ output "root_password_instructions" {
 
   gcloud container clusters get-credentials gitlab --zone ${var.region} --project ${var.project_id}
   kubectl get secret gitlab-gitlab-initial-root-password -o go-template='{{ .data.password }}' | base64 -d && echo
-  
+
 EOF
 
 
   description = "Instructions for getting the root user's password for initial setup"
 }
-
