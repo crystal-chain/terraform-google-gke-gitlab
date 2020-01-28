@@ -190,7 +190,7 @@ resource "google_sql_user" "gitlab" {
 resource "google_redis_instance" "gitlab" {
   name               = "gitlab"
   tier               = "STANDARD_HA"
-  memory_size_gb     = 5
+  memory_size_gb     = 1
   region             = var.region
   authorized_network = google_compute_network.gitlab.self_link
 
@@ -295,9 +295,14 @@ resource "google_container_node_pool" "gitlab" {
   node_count = 1
   depends_on = []
 
+  autoscaling {
+    max_node_count = 1
+    min_node_count = 0
+  }
+
   node_config {
     preemptible  = false
-    machine_type = "n1-standard-4"
+    machine_type = "n1-standard-2"
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/compute",
