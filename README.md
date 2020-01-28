@@ -20,8 +20,9 @@ module "gke-gitlab" {
 }
 ```
 
-Then perform the following commands on the root folder:
+Then perform the following commands on the examples/simple_example folder:
 
+- `../../helpers/export_env.sh` to configure GCP authentification for Terraform
 - `terraform init` to get the plugins
 - `terraform plan` to see the infrastructure plan
 - `terraform apply` to apply the infrastructure build
