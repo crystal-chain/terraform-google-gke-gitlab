@@ -119,7 +119,7 @@ resource "google_compute_address" "gitlab" {
   address_type = "EXTERNAL"
   description  = "Gitlab Ingress IP"
   depends_on   = [google_project_service.compute]
-  count        = 0
+  count        = 1
 }
 
 // Database
@@ -410,11 +410,11 @@ data "google_compute_address" "gitlab" {
   region = var.region
 
   # Do not get data if the address is being created as part of the run
-  count = 1
+  count = 0
 }
 
 locals {
-  gitlab_address = data.google_compute_address.gitlab[0].address
+  gitlab_address = google_compute_address.gitlab[0].address
   domain         = var.domain
 }
 
@@ -449,4 +449,3 @@ resource "helm_release" "gitlab" {
     kubernetes_storage_class.pd-ssd,
   ]
 }
-

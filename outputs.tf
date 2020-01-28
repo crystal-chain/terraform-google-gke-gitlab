@@ -15,7 +15,7 @@
  */
 
 output "gitlab_address" {
-  value       = data.google_compute_address.gitlab[0].address
+  value       = google_compute_address.gitlab[0].address
   description = "IP address where you can connect to your GitLab instance"
 }
 
