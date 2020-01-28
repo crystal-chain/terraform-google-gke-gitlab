@@ -34,3 +34,6 @@ variable "domain" {
   description = "Domain for hosting gitlab functionality (ie mydomain.com would access gitlab at gitlab.mydomain.com)"
 }
 
+variable "gitlab_address_name" {
+  description = "Name of the address to use for GitLab ingress"
+}

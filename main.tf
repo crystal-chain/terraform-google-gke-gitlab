@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-terraform {
-  required_version = ">= 0.12.0"
-}
-
 provider "google" {
   project = "${var.project_id}"
 }
@@ -115,7 +111,7 @@ resource "google_compute_address" "gitlab" {
   address_type = "EXTERNAL"
   description  = "Gitlab Ingress IP"
   depends_on   = ["google_project_service.compute"]
-  count        = "${var.gitlab_address_name}" == "" ? 1 : 0
+  count        = 0
 }
 
 // Database
@@ -403,11 +399,11 @@ data "google_compute_address" "gitlab" {
   region = "${var.region}"
 
   # Do not get data if the address is being created as part of the run
-  count = "${var.gitlab_address_name}" == "" ? 0 : 1
+  count = 1
 }
 
 locals {
-  gitlab_address = "${var.gitlab_address_name}" == "" ? "${google_compute_address.gitlab.0.address}" : "${data.google_compute_address.gitlab.0.address}"
+  gitlab_address = "${data.google_compute_address.gitlab.0.address}"
   domain         = "${var.domain}" != "" ? "${var.domain}" : "${local.gitlab_address}.xip.io"
 }
 

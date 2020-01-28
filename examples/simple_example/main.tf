@@ -24,5 +24,5 @@ module "gke-gitlab" {
   region             = var.region
   gitlab_db_password = var.gitlab_db_password
   domain             = var.domain
+  gitlab_address_name = var.gitlab_address_name
 }
-
